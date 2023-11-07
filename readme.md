@@ -9,7 +9,21 @@ This can be useful for quickly and easily accessing a remote Windows machine via
 ## Requirements
 
 - Windows: Ensure that the Windows Remote Desktop Connection client is installed on your system
-- Ngrok: Ensure that Ngrok is installed and configured on your system and that there is an active Ngrok tunnel on the remote Windows machine.
+- On Ngrok (Remote):  
+  Ensure that Ngrok is installed and configured on your system and that there is an active Ngrok tunnel on the remote Windows machine.  
+
+- On Ngrok (Client):
+  - Run ```choco install ngrok``` from an elevated command prompt to install Ngrok on Windows, or download ngrok.exe from [https://ngrok.com/download](https://ngrok.com/download)
+  - Run ```ngrok config add-authtoken <AuthToken>``` to add your Ngrok authtoken to the Ngrok configuration. Your authtoken can be found at [https://dashboard.ngrok.com/auth](https://dashboard.ngrok.com/auth)
+  - Create an API token from [https://dashboard.ngrok.com/api](https://dashboard.ngrok.com/api) and add it to the ngrok configuration using ```ngrok config add-api-key <API Key>```  
+
+   Your config file located in ```C:\Users\<UserName>\AppData\Local/ngrok/ngrok.yml``` should look like this:
+
+   ```shell
+   version: "2"
+   authtoken: <AuthToken>
+   api_key: <API Key>
+   ```
 
 ## **How to Use**
 

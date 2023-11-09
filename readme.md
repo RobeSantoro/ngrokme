@@ -80,6 +80,6 @@ or download the [ngrokme.exe](https://github.com/RobeSantoro/ngrokme/releases/do
 ## **Disclaimer**
 
 - This script is intended for educational and testing purposes only.
-- Ensure that you have permission to access the remote machine via Ngrok.
+- Ensure that you have permission to access the remote machine via Ngrok. - Beware of firewall rules that might block the Remote Desktop Connection.
 
 Please use this script responsibly and in compliance with ngrok's terms of service. Consider buying a ngrok license. In this way, you can have a fixed TCP address and avoid the use of this script.

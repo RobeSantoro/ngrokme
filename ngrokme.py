@@ -9,8 +9,12 @@ $ Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "/v:<public URL>"
 import json
 import subprocess
 
+from colorama import Fore, init
+init(autoreset=True)
+
+
 def ngrokme():
-        
+
     # Query the ngrok API via command line
     cmd = 'ngrok api endpoints list'
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
@@ -19,7 +23,12 @@ def ngrokme():
 
     # Parse the JSON output
     data = json.loads(output)
-    public_url = data['endpoints'][0]['public_url'][6:]
+
+    try:
+        public_url = data['endpoints'][0]['public_url'][6:]
+    except IndexError:
+        print(Fore.RED + 'No ngrok tunnel found. Please check a ngrok tunnel is running.')
+        exit()
 
     print('Public URL: ')
     print(public_url)
@@ -29,6 +38,7 @@ def ngrokme():
 
     # Execute the PowerShell command
     subprocess.run(["powershell", "-Command", powershell_cmd])
+
 
 if __name__ == '__main__':
     ngrokme()

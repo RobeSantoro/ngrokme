@@ -27,7 +27,7 @@ def ngrokme():
     try:
         public_url = data['endpoints'][0]['public_url'][6:]
     except IndexError:
-        print(Fore.RED + 'No ngrok tunnel found. Please check a ngrok tunnel is running.')
+        print(Fore.RED + 'No ngrok tunnel found. \nPlease check if ngrok has an active tunnel on the remote machine.')
         exit()
 
     print('Public URL: ')

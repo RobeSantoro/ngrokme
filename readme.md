@@ -1,65 +1,85 @@
-# **Ngrokme**
+# **ngrokme.py**
 
 ## **Description**
 
-Ngrokme is a simple script that allows you to obtain the TCP address of a Ngrok tunnel endpoint and start a Windows Remote Desktop Connection to that endpoint.  
+**ngrokme.py** is a simple script for remote desktop control using Windows Remote Desktop Connection through a Ngrok tunnel.
 
-This can be useful for quickly and easily accessing a remote Windows machine via a Ngrok tunnel with a **free Ngrok account** that changes the TCP address every time the remote machine is restarted.
+It allows you to obtain the TCP address of your Ngrok tunnel endpoint and start a Windows ***Remote Desktop Connection*** to that endpoint.
 
-## Requirements
+>This can be useful for quickly and easily accessing a remote Windows machine via a Ngrok tunnel with a **free Ngrok account** that changes the TCP address every time the remote machine is restarted.
 
-- Windows: Ensure that the Windows Remote Desktop Connection client is installed on your system
-- On Ngrok (Remote):  
-  Ensure that Ngrok is installed and configured on your system and that there is an active Ngrok tunnel on the remote Windows machine.  
+## Setup
 
-- On Ngrok (Client):
-  - Run ```choco install ngrok``` from an elevated command prompt to install Ngrok on Windows, or download ngrok.exe from [https://ngrok.com/download](https://ngrok.com/download)
-  - Run ```ngrok config add-authtoken <AuthToken>``` to add your Ngrok authtoken to the Ngrok configuration. Your authtoken can be found at [https://dashboard.ngrok.com/auth](https://dashboard.ngrok.com/auth)
-  - Create an API token from [https://dashboard.ngrok.com/api](https://dashboard.ngrok.com/api) and add it to the ngrok configuration using ```ngrok config add-api-key <API Key>```  
+Create an account at [https://ngrok.com/](https://ngrok.com/) and install the Ngrok client on both the client and remote machines.
+
+### Client machine
+
+1. **Install ngrok**  
+From an elevated command prompt to install Ngrok on Windows, Run:
+
+   ```bash
+   choco install ngrok
+   ```
+
+   or download ngrok.exe from [https://ngrok.com/download](https://ngrok.com/download)
+
+1. **Add your Ngrok Auth Token to the Ngrok configuration**  
+
+   ```bash
+   ngrok config add-authtoken <AuthToken>
+   ```
+
+   Your Auth Token can be found at [https://dashboard.ngrok.com/auth](https://dashboard.ngrok.com/auth)
+
+1. **Add your Ngrok API Key to the Ngrok configuration**
+
+   Create an API token from [https://dashboard.ngrok.com/api](https://dashboard.ngrok.com/api) and add it to the ngrok configuration using:
+
+   ```bash
+   ngrok config add-api-key <API Key>
+   ```  
 
    Your config file located in ```C:\Users\<UserName>\AppData\Local/ngrok/ngrok.yml``` should look like this:
 
-   ```shell
+   ```bash
    version: "2"
    authtoken: <AuthToken>
    api_key: <API Key>
    ```
 
-## **How to Use**
+### **Remote machine**
 
-1. Create a Ngrok API token:
+1. **Install ngrok**
 
-   - Visit the Ngrok website at [ngrok.com](https://ngrok.com/) and sign in to your account.
-   - In your Ngrok dashboard, navigate to the "API" section to create an API token.
-   - Copy the generated API token as you'll need it in the next step.
+2. **Add your Ngrok Auth Token to the Ngrok configuration**  
 
-2. Configure Ngrok with your API token:
-
-   - Open a terminal or command prompt.
-   - Run the following command to add your Ngrok API token to the configuration:
+3. **Create a TCP tunnel**  
 
    ```bash
-   ngrok config add-api-key "{YOUR_API_KEY}"
+   ngrok tcp 3389
    ```
 
-   Replace `{YOUR_API_KEY}` with the API token you generated in step 1.
+   This will create a TCP tunnel to the remote machine on port 3389 (RDP).
 
-3. Download the Ngrokme executable from the [Releases](https://github.com/robesantoro/ngrokme/releases) section of this repository.
+## **Usage**
 
-4. Place the Ngrokme executable in a convenient location on your system and launch it.
+On the client machine, run:
 
-The script will query the Ngrok API to obtain the public URL of a TCP tunnel endpoint and then start a Remote Desktop Connection to that endpoint.
+```bash
+python ngrokme.py
+```
 
-1. You will be prompted to log in to the remote Windows machine.
+or download the [ngrokme.exe](https://github.com/RobeSantoro/ngrokme/releases/download/v1.0/ngrokme.exe) from the releases page and run it.
 
 ## **Important Notes**
 
 - Make sure your Ngrok tunnel is up and running before executing this script.
 - You might be prompted for authentication when connecting to the remote Windows machine.
+- Beware of firewall rules that might block the Remote Desktop Connection.
 
 ## **Disclaimer**
 
 - This script is intended for educational and testing purposes only.
 - Ensure that you have permission to access the remote machine via Ngrok.
 
-Please use this script responsibly and in compliance with any applicable laws and regulations.
+Please use this script responsibly and in compliance with ngrok's terms of service. Consider buying a ngrok license. In this way, you can have a fixed TCP address and avoid the use of this script.

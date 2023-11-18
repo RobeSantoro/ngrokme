@@ -6,6 +6,7 @@ $ ngrok api endpoints list
 $ Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "/v:<public URL>"
 """
 
+import os
 import json
 import subprocess
 
@@ -21,17 +22,28 @@ def ngrokme():
     (output, err) = p.communicate()
     p_status = p.wait()
 
-    # Parse the JSON output
-    data = json.loads(output)
+    # Parse the JSON output if any
+    try:
+        data = json.loads(output)
+    except json.decoder.JSONDecodeError:
+        print()
+        print(Fore.RED + 'ERROR: Check ngrok configuration.')
+        print(f'Run {Fore.CYAN}ngrok config edit{Fore.RESET} to check the configuration file.')
+        print()
+        input('Press Enter to exit...')
+        os._exit(1)
 
+    # Get the public URL of the TCP tunnel if any
     try:
         public_url = data['endpoints'][0]['public_url'][6:]
     except IndexError:
-        print(Fore.RED + 'No ngrok tunnel found. \nPlease check if ngrok has an active tunnel on the remote machine.')
-        exit()
+        print()
+        print(Fore.RED + 'ERROR:  No ngrok tunnel found. \nPlease check if ngrok has an active tunnel on the remote machine.')
+        print()
+        input('Press Enter to exit...')
+        os._exit(1)
 
-    print('Public URL: ')
-    print(public_url)
+    print(f'Public URL: {Fore.CYAN + public_url} ')
 
     # Start a RDP session to the public URL
     powershell_cmd = f'Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "/v:{ public_url }"'

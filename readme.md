@@ -61,6 +61,16 @@ From an elevated command prompt to install Ngrok on Windows, Run:
 
    This will create a TCP tunnel to the remote machine on port 3389 (RDP).
 
+> You can set up an `ng.bat` batch file that runs on startup to create the TCP tunnel automatically, with the following content:
+>
+>   ```pwsh
+>   powershell -WindowStyle Hidden -Command "& {Start-Process ngrok -ArgumentList 'tcp 3389'}"
+>   ```
+>
+>   and add it to a scheduled task that runs it on startup automatically, using the task scheduler:
+>
+>   ![task settings](./media/task_settings.gif)
+
 ## **Usage**
 
 On the client machine, run:

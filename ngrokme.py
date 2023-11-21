@@ -44,6 +44,7 @@ def ngrokme():
         os._exit(1)
 
     print(f'Public URL: {Fore.CYAN + public_url} ')
+    print(f'{Fore.GREEN}Starting RDP session...')
 
     # Start a RDP session to the public URL
     powershell_cmd = f'Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "/v:{ public_url }"'

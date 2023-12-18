@@ -1,4 +1,4 @@
-# **ngrokme.py**
+# [**ngrokme.py**](http://ngrokme.py)
 
 ## **Description**
 
@@ -6,40 +6,40 @@
 
 It allows you to obtain the TCP address of your Ngrok tunnel endpoint and start a Windows ***Remote Desktop Connection*** to that endpoint.
 
->This can be useful for quickly and easily accessing a remote Windows machine via a Ngrok tunnel with a **free Ngrok account** that changes the TCP address every time the remote machine is restarted.
+> This can be useful for quickly and easily accessing a remote Windows machine via a Ngrok tunnel with a **free Ngrok account** that changes the TCP address every time the remote machine is restarted.
 
 ## Setup
 
-Create an account at [https://ngrok.com/](https://ngrok.com/) and install the Ngrok client on both the client and remote machines.
+Create an account at <https://ngrok.com/> and install the Ngrok client on both the client and remote machines.
 
 ### Client machine
 
-1. **Install ngrok**  
-From an elevated command prompt to install Ngrok on Windows, Run:
+1. **Install ngrok**\
+   From an elevated command prompt to install Ngrok on Windows, Run:
 
    ```bash
    choco install ngrok
    ```
 
-   or download ngrok.exe from [https://ngrok.com/download](https://ngrok.com/download)
+   or download ngrok.exe from <https://ngrok.com/download> and add it to your environment path.
 
-1. **Add your Ngrok Auth Token to the Ngrok configuration**  
+2. **Add your Ngrok Auth Token to the Ngrok configuration**
 
    ```bash
    ngrok config add-authtoken <AuthToken>
    ```
 
-   Your Auth Token can be found at [https://dashboard.ngrok.com/auth](https://dashboard.ngrok.com/auth)
+   Your Auth Token can be found at <https://dashboard.ngrok.com/auth>
 
-1. **Add your Ngrok API Key to the Ngrok configuration**
+3. **Add your Ngrok API Key to the Ngrok configuration**
 
-   Create an API token from [https://dashboard.ngrok.com/api](https://dashboard.ngrok.com/api) and add it to the ngrok configuration using:
+   Create an API token from <https://dashboard.ngrok.com/api> and add it to the ngrok configuration using:
 
    ```bash
    ngrok config add-api-key <API Key>
-   ```  
+   ```
 
-   Your config file located in ```C:\Users\<UserName>\AppData\Local/ngrok/ngrok.yml``` should look like this:
+   Your config file located in `C:\Users\<UserName>\AppData\Local/ngrok/ngrok.yml` should look like this:
 
    ```bash
    version: "2"
@@ -51,9 +51,9 @@ From an elevated command prompt to install Ngrok on Windows, Run:
 
 1. **Install ngrok**
 
-2. **Add your Ngrok Auth Token to the Ngrok configuration**  
+2. **Add your Ngrok Auth Token to the Ngrok configuration**
 
-3. **Create a TCP tunnel**  
+3. **Create a TCP tunnel**
 
    ```bash
    ngrok tcp 3389
@@ -63,13 +63,13 @@ From an elevated command prompt to install Ngrok on Windows, Run:
 
 > You can set up an `ng.bat` batch file that runs on startup to create the TCP tunnel automatically, with the following content:
 >
->   ```pwsh
->   powershell -WindowStyle Hidden -Command "& {Start-Process ngrok -ArgumentList 'tcp 3389'}"
->   ```
+> ```pwsh
+> powershell -WindowStyle Hidden -Command "& {Start-Process ngrok -ArgumentList 'tcp 3389'}"
+> ```
 >
->   and add it to a scheduled task that runs it on startup automatically, using the task scheduler:
+> and add it to a scheduled task that runs it on startup automatically, using the task scheduler:
 >
->   ![task settings](./media/task_settings.gif)
+> ![task settings](./media/task_settings.gif)
 
 ## **Usage**
 
@@ -91,8 +91,16 @@ or download the [ngrokme.exe](https://github.com/RobeSantoro/ngrokme/releases/do
 
 To build the executable, run:
 
+On Windows
+
 ```bash
 pyinstaller --onefile --icon=media/ngrok.ico ngrokme.py
+```
+
+On MacOs
+
+```bash
+pyinstaller --onefile --icon=media/ngrok.ico --add-data "template.rdp:." ngrokme.py
 ```
 
 ## **Disclaimer**

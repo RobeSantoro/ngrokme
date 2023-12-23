@@ -14,8 +14,15 @@ import os
 import json
 import subprocess
 
+from pprint import pprint
 from colorama import Fore, init
+from dotenv import load_dotenv
+
 init(autoreset=True)
+load_dotenv()
+
+print(os.getenv('RDP_USER'))
+print(os.getenv('RDP_PASSWORD'))
 
 
 def ngrokme():
@@ -57,22 +64,34 @@ def ngrokme():
             print(Fore.RED + 'ERROR: Microsoft Remote Desktop app not found.')
             input('Press Enter to exit...')
             os._exit(1)
-             
+
         # Check if the Microsoft Remote Desktop app is running and start it if not
-        if not os.system('pgrep Microsoft Remote Desktop > /dev/null'):
+        if not os.system('pgrep -x "Microsoft Remote Desktop"'):
             print()
-            print(Fore.YELLOW + 'ERROR: Microsoft Remote Desktop app not running.')
-            input('Press Enter to start it...')
+            print(Fore.YELLOW + 'Microsoft Remote Desktop app not running. Starting it...')
+            # input('Press Enter to start it...')
             os.system('open -a "Microsoft Remote Desktop"')
 
         # Get the folder where the script is running
         script_dir = os.path.dirname(os.path.realpath(__file__))
 
-        with open(f'{script_dir}/template.rdp', 'r') as f:
-            data = f.read().replace('{RDP_ADDRESS}', public_url)
+        with open(f'{script_dir}/template.rdp', 'r') as template_file:
 
-        with open(f'{script_dir}/current.rdp', 'w') as f:
-            f.write(data)
+            # Replace the placeholder with the current public URL
+            data = template_file.read().replace('{RDP_ADDRESS}', public_url)
+
+            # Replace the username with the user from .env fileù
+            data = data.replace('{RDP_USER}', os.getenv('RDP_USER'))
+            data = data.replace('{RDP_PASSWORD}', os.getenv('RDP_PASSWORD'))
+
+            with open(f'{script_dir}/current.rdp', 'w') as current_file:
+                pprint(data)
+                current_file.write(data)
+
+            # Close the files
+            current_file.close()
+
+        template_file.close()
 
         # Open the .rdp file
         term_cmd = f'open {script_dir}/current.rdp'
@@ -82,7 +101,8 @@ def ngrokme():
 
     # (WINDOWS)
     else:
-        powershell_cmd = f'Start-Process "$env:windir\\system32\\mstsc.exe" -ArgumentList "/v:{public_url}"'
+        powershell_cmd = f'Start-Process "$env:windir\\system32\\mstsc.exe" -ArgumentList "/v:{
+            public_url}"'
 
         # Execute the PowerShell command
         subprocess.run(["powershell", "-Command", powershell_cmd])

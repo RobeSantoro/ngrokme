@@ -30,10 +30,10 @@ def ngrokme():
     try:
         data = json.loads(output)
     except json.decoder.JSONDecodeError:
-
         print()
         print(Fore.RED + 'ERROR: Check ngrok configuration, firewall and network settings.')
-        print(f'Run {Fore.CYAN}ngrok config edit{Fore.RESET} to check the configuration file.')
+        print(f'Run {Fore.CYAN}ngrok config edit{
+              Fore.RESET} to check the configuration file.')
         print()
         input('Press Enter to exit...')
         os._exit(1)
@@ -48,33 +48,45 @@ def ngrokme():
         input('Press Enter to exit...')
         os._exit(1)
 
-    print(f'Public URL: {Fore.CYAN + public_url} ')
-    print(f'{Fore.GREEN}Starting RDP session...')
-    input('Press Enter to connect')
-
-    # (Windows)
-    powershell_cmd = f'Start-Process "$env:windir\\system32\\mstsc.exe" -ArgumentList "/v:{ public_url }"'
-
     # (MAC OSX)
-    # Get the folder where the script is running
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-
-    print(script_dir)
-
-    with open(f'{script_dir}/template.rdp', 'r') as f:
-        data = f.read().replace('{RDP_ADDRESS}', public_url)
-    with open(f'{script_dir}/template.rdp', 'w') as f:
-        f.write(data)
-
-    # Open the .rdp file
-    term_cmd = 'open template.rdp'
-
     if os.name == 'posix':
+
+        # Check if the Microsoft Remote Desktop app is installed
+        if not os.path.exists('/Applications/Microsoft Remote Desktop.app'):
+            print()
+            print(Fore.RED + 'ERROR: Microsoft Remote Desktop app not found.')
+            input('Press Enter to exit...')
+            os._exit(1)
+             
+        # Check if the Microsoft Remote Desktop app is running and start it if not
+        if not os.system('pgrep Microsoft Remote Desktop > /dev/null'):
+            print()
+            print(Fore.YELLOW + 'ERROR: Microsoft Remote Desktop app not running.')
+            input('Press Enter to start it...')
+            os.system('open -a "Microsoft Remote Desktop"')
+
+        # Get the folder where the script is running
+        script_dir = os.path.dirname(os.path.realpath(__file__))
+
+        with open(f'{script_dir}/template.rdp', 'r') as f:
+            data = f.read().replace('{RDP_ADDRESS}', public_url)
+
+        with open(f'{script_dir}/current.rdp', 'w') as f:
+            f.write(data)
+
+        # Open the .rdp file
+        term_cmd = f'open {script_dir}/current.rdp'
+
         # Execute the terminal command
         subprocess.run(term_cmd, shell=True)
+
+    # (WINDOWS)
     else:
+        powershell_cmd = f'Start-Process "$env:windir\\system32\\mstsc.exe" -ArgumentList "/v:{public_url}"'
+
         # Execute the PowerShell command
         subprocess.run(["powershell", "-Command", powershell_cmd])
+
 
 if __name__ == '__main__':
     ngrokme()

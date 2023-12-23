@@ -94,13 +94,13 @@ To build the executable, run:
 On Windows
 
 ```bash
-pyinstaller --onefile --icon=media/ngrok.ico ngrokme.py
+pyinstaller --onefile --icon=media/ngrok.ico --name NgrokMe ngrokme.py
 ```
 
-On MacOs
+On macOS
 
 ```bash
-pyinstaller --onefile --icon=media/ngrok.ico --add-data "template.rdp:." ngrokme.py
+pyinstaller --onefile --icon media/ngrok.ico --add-data "template.rdp:."  --name NgrokMe ngrokme.py
 ```
 
 ## **Disclaimer**

@@ -100,7 +100,7 @@ pyinstaller --onefile --icon=media/ngrok.ico --name NgrokMe ngrokme.py
 On macOS
 
 ```bash
-pyinstaller --onefile --icon media/ngrok.ico --add-data "template.rdp:."  --name NgrokMe ngrokme.py
+pyinstaller --onefile --icon media/ngrok.ico --add-data "template.rdp:." --add-data ".env:." --name NgrokMe ngrokme.py
 ```
 
 ## **Disclaimer**

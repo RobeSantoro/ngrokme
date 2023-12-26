@@ -15,11 +15,16 @@ import json
 import subprocess
 
 from pprint import pprint
-from colorama import Fore, init
 from dotenv import load_dotenv
 
+from colorama import Fore, init
 init(autoreset=True)
-load_dotenv()
+
+# Get the folder where the script is running
+script_dir = os.path.dirname(os.path.realpath(__file__))
+print(script_dir)
+
+load_dotenv(f'{script_dir}/.env')
 
 print(os.getenv('RDP_USER'))
 print(os.getenv('RDP_PASSWORD'))
@@ -72,9 +77,6 @@ def ngrokme():
             # input('Press Enter to start it...')
             os.system('open -a "Microsoft Remote Desktop"')
 
-        # Get the folder where the script is running
-        script_dir = os.path.dirname(os.path.realpath(__file__))
-
         with open(f'{script_dir}/template.rdp', 'r') as template_file:
 
             # Replace the placeholder with the current public URL
@@ -85,7 +87,7 @@ def ngrokme():
             data = data.replace('{RDP_PASSWORD}', os.getenv('RDP_PASSWORD'))
 
             with open(f'{script_dir}/current.rdp', 'w') as current_file:
-                pprint(data)
+                print(data)
                 current_file.write(data)
 
             # Close the files

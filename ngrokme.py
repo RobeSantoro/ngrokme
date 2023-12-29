@@ -14,7 +14,6 @@ import os
 import json
 import subprocess
 
-from pprint import pprint
 from dotenv import load_dotenv
 
 from colorama import Fore, init
@@ -36,7 +35,7 @@ def ngrokme():
     cmd = 'ngrok api endpoints list'
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
-    p_status = p.wait()
+    p.wait()
 
     # Parse the JSON output if any
     try:
@@ -99,7 +98,7 @@ def ngrokme():
         term_cmd = f'open {script_dir}/current.rdp'
 
         # Execute the terminal command
-        subprocess.run(term_cmd, shell=True)
+        os.system(term_cmd)
 
     # (WINDOWS)
     else:
